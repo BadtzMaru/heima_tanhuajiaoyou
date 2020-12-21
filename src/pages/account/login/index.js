@@ -93,6 +93,16 @@ class Login extends Component {
 			vcode: vcodeTxt,
 		});
 		console.log(res);
+		if (res.code !== '10000') {
+			return false;
+		}
+		if (res.data.isNew) {
+			// 新用户跳转到userinfo页面
+			this.props.navigation.navigate('UserInfo');
+		} else {
+			// 老用户
+			alert('老用户跳转交友页面');
+		}
 	};
 	// 渲染登陆页面
 	renderLogin = () => {
