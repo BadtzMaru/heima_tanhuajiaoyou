@@ -5,6 +5,7 @@ import SvgUri from 'react-native-svg-uri';
 import {male, female} from '../../../res/fonts/iconSvg';
 import {Input} from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
+import Geo from '../../../utils/Geo';
 
 class Index extends Component {
 	state = {
@@ -25,12 +26,19 @@ class Index extends Component {
 		// 详细地址
 		address: '',
 	};
+	async componentDidMount() {
+		const res = await Geo.getCityByLocation();
+		console.log(res);
+		const address = res.regeocode.formatted_address;
+		const city = res.regeocode.addressComponent.city.replace('市', '');
+		this.setState({address, city});
+	}
 	// 选择性别
 	chooseGender = (gender) => {
 		this.setState({gender});
 	};
 	render() {
-		const {gender, nickname, birthday} = this.state;
+		const {gender, nickname, birthday, address, city} = this.state;
 		const dateNow = new Date();
 		const currentDate =
 			dateNow.getFullYear() +
@@ -147,6 +155,15 @@ class Index extends Component {
 					}}
 				/>
 				{/* 4.0 日期 结束 */}
+
+				{/* 5.0 地址 开始 */}
+				<View>
+					<Input
+						value={'当前定位:' + city}
+						inputStyle={{color: '#666'}}
+					/>
+				</View>
+				{/* 5.0 地址 结束 */}
 			</View>
 		);
 	}

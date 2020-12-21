@@ -24,11 +24,6 @@ class Geo {
 		});
 	}
 	async getCityByLocation() {
-		await init({
-			// 来自于 高德地图中的 android 中的key
-			ios: '417bdb7d7565fb2ad91e815ca8c2d3f8',
-			android: '417bdb7d7565fb2ad91e815ca8c2d3f8',
-		});
 		const {longitude, latitude} = await this.getCurrentPosition();
 		const res = await axios.get(
 			'https://restapi.amap.com/v3/geocode/regeo',
@@ -36,7 +31,7 @@ class Geo {
 				params: {
 					location: `${longitude},${latitude}`,
 					// 高德地图中web端的key
-					key: 'b9afa1d527b1f6ee4ef7d068bf399433',
+					key: '6ca69fbf5bea97941d478fe525300ba7',
 				},
 			},
 		);
