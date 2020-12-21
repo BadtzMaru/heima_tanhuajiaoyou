@@ -19,6 +19,7 @@ class Geo {
 		return new Promise((resolve, reject) => {
 			console.log('开始定位');
 			Geolocation.getCurrentPosition(({coords}) => {
+				console.log(coords);
 				resolve(coords);
 			}, reject);
 		});

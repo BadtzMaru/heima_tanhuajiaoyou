@@ -6,6 +6,11 @@ import {male, female} from '../../../res/fonts/iconSvg';
 import {Input} from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import Geo from '../../../utils/Geo';
+import Picker from 'react-native-picker';
+import CityJson from '../../../res/citys.json';
+import THButton from '../../../components/THButton';
+import Toast from '../../../utils/Toast';
+import ImagePicker from 'react-native-image-crop-picker';
 
 class Index extends Component {
 	state = {
@@ -36,6 +41,47 @@ class Index extends Component {
 	// 选择性别
 	chooseGender = (gender) => {
 		this.setState({gender});
+	};
+	// 选择城市
+	showCityPicker = () => {
+		Picker.init({
+			// 显示哪些数据 全国城市数据
+			pickerData: CityJson,
+			// 默认选择哪一个数据
+			selectedValue: ['北京', '北京'],
+			wheelFlex: [1, 1, 0], // 显示省和市
+			pickerConfirmBtnText: '确定',
+			pickerCancelBtnText: '取消',
+			pickerTitleText: '选择城市',
+			onPickerConfirm: (data) => {
+				// data =  [广东，广州，天河]
+				this.setState({
+					city: data[1],
+				});
+			},
+		});
+		Picker.show();
+	};
+	// 设置头像
+	chooseHeadImg = async () => {
+		// 1. 校验用户昵称 生日 当前地址 city
+		// 2. 使用图片裁剪插件
+		// 3. 将选择好的图片上传到后台
+		// 4. 数据提交到后台,完成信息填写
+		// 5. 成功 -> 执行极光的注册 , 极光的登录
+		// 跳转到交友的首页
+
+		const {nickname, birthday, city} = this.state;
+		if (!nickname || !birthday || !city) {
+			return Toast.sad('昵称或者生日或者城市不合法', 2000, 'center');
+		}
+		// 获取选中后的图片
+		const image = await ImagePicker.openPicker({
+			width: 300,
+			height: 300,
+			cropping: true,
+		});
+		console.log(image);
 	};
 	render() {
 		const {gender, nickname, birthday, address, city} = this.state;
@@ -157,13 +203,30 @@ class Index extends Component {
 				{/* 4.0 日期 结束 */}
 
 				{/* 5.0 地址 开始 */}
-				<View>
-					<Input
-						value={'当前定位:' + city}
-						inputStyle={{color: '#666'}}
-					/>
+				<View style={{marginTop: pxToDp(20)}}>
+					<TouchableOpacity onPress={this.showCityPicker}>
+						<Input
+							value={'当前定位:' + city}
+							inputStyle={{color: '#666'}}
+							disabled={true}
+						/>
+					</TouchableOpacity>
 				</View>
 				{/* 5.0 地址 结束 */}
+
+				{/* 6.0 选择头像 开始 */}
+				<View>
+					<THButton
+						onPress={this.chooseHeadImg}
+						style={{
+							height: pxToDp(40),
+							borderRadius: pxToDp(20),
+							alignSelf: 'center',
+						}}>
+						设置头像
+					</THButton>
+				</View>
+				{/* 6.0 选择头像 结束 */}
 			</View>
 		);
 	}
