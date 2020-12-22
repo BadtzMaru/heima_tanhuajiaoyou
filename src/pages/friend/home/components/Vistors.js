@@ -38,6 +38,7 @@ class Index extends Component {
 					alignItems: 'center',
 					paddingLeft: pxToDp(5),
 					paddingRight: pxToDp(5),
+					paddingBottom: pxToDp(5),
 				}}>
 				<Text style={{flex: 1, color: '#777', fontSize: pxToDp(15)}}>
 					最近有{visitors.length}人来访,快去查看...
@@ -53,9 +54,9 @@ class Index extends Component {
 						<Image
 							key={i}
 							style={{
-								width: pxToDp(40),
-								height: pxToDp(40),
-								borderRadius: pxToDp(20),
+								width: pxToDp(35),
+								height: pxToDp(35),
+								borderRadius: pxToDp(35),
 							}}
 							source={{uri: BASE_URI + v.header}}
 						/>
