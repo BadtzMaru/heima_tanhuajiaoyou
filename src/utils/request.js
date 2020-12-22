@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {BASE_URI} from './pathMap';
 import Toast from './Toast';
+import RootStore from '../mobx';
 
 const instance = axios.create({
 	baseURL: BASE_URI,
@@ -35,4 +36,29 @@ instance.interceptors.response.use(
 export default {
 	get: instance.get,
 	post: instance.post,
+	// post 自动带上token
+	privatePost: (url, data = {}, options = {}) => {
+		const token = RootStore.token;
+		const headers = options.headers || {};
+		return instance.post(url, data, {
+			...options,
+			headers: {
+				Authorization: `Bearer ${token}`,
+				...headers,
+			},
+		});
+	},
+	// get 自动带上token
+	privateGet: (url, data, options = {}) => {
+		const token = RootStore.token;
+		const headers = options.headers || {};
+		return instance.get(url, {
+			...options,
+			params: data,
+			headers: {
+				Authorization: `Bearer ${token}`,
+				...headers,
+			},
+		});
+	},
 };

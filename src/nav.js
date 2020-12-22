@@ -1,23 +1,39 @@
-import React from 'react';
-import {Button, View, Text} from 'react-native';
+import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from './pages/account/login';
 import Demo from './pages/Demo';
 import UserInfo from './pages/account/userinfo';
+import Tabbar from './tabbar';
+import {inject, observer} from 'mobx-react';
 
 const Stack = createStackNavigator();
 
-function Nav() {
-	return (
-		<NavigationContainer>
-			<Stack.Navigator initialRouteName="UserInfo" headerMode="none">
-				<Stack.Screen name="Demo" component={Demo} />
-				<Stack.Screen name="Login" component={Login} />
-				<Stack.Screen name="UserInfo" component={UserInfo} />
-			</Stack.Navigator>
-		</NavigationContainer>
-	);
+@inject('RootStore')
+@observer
+class Nav extends Component {
+	constructor(props) {
+		super();
+		this.state = {
+			initialRouteName: props.RootStore.token ? 'Tabbar' : 'Login',
+		};
+	}
+	state = {};
+	render() {
+		const {initialRouteName} = this.state;
+		return (
+			<NavigationContainer>
+				<Stack.Navigator
+					initialRouteName={initialRouteName}
+					headerMode="none">
+					<Stack.Screen name="Demo" component={Demo} />
+					<Stack.Screen name="Login" component={Login} />
+					<Stack.Screen name="UserInfo" component={UserInfo} />
+					<Stack.Screen name="Tabbar" component={Tabbar} />
+				</Stack.Navigator>
+			</NavigationContainer>
+		);
+	}
 }
 
 export default Nav;

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {pxToDp} from '../../../utils/stylesKits';
 import SvgUri from 'react-native-svg-uri';
 import {male, female} from '../../../res/fonts/iconSvg';
@@ -11,7 +11,14 @@ import CityJson from '../../../res/citys.json';
 import THButton from '../../../components/THButton';
 import Toast from '../../../utils/Toast';
 import ImagePicker from 'react-native-image-crop-picker';
+import {Overlay} from 'teaset';
+import {inject, observer} from 'mobx-react';
+import request from '../../../utils/request';
+import {ACCOUNT_CHECKHEADIMAGE, ACCOUNT_REGINFO} from '../../../utils/pathMap';
+import JMessage from '../../../utils/JMessage';
 
+@inject('RootStore')
+@observer
 class Index extends Component {
 	state = {
 		// 昵称
@@ -35,8 +42,18 @@ class Index extends Component {
 		const res = await Geo.getCityByLocation();
 		console.log(res);
 		const address = res.regeocode.formatted_address;
-		const city = res.regeocode.addressComponent.city.replace('市', '');
-		this.setState({address, city});
+		const city =
+			res.regeocode.addressComponent.city &&
+			typeof res.regeocode.addressComponent.city === 'string'
+				? res.regeocode.addressComponent.city.replace('市', '')
+				: res.regeocode.addressComponent.province;
+		const lng = res.regeocode.addressComponent.streetNumber.location.split(
+			',',
+		)[0];
+		const lat = res.regeocode.addressComponent.streetNumber.location.split(
+			',',
+		)[1];
+		this.setState({address, city, lng, lat});
 	}
 	// 选择性别
 	chooseGender = (gender) => {
@@ -70,7 +87,6 @@ class Index extends Component {
 		// 4. 数据提交到后台,完成信息填写
 		// 5. 成功 -> 执行极光的注册 , 极光的登录
 		// 跳转到交友的首页
-
 		const {nickname, birthday, city} = this.state;
 		if (!nickname || !birthday || !city) {
 			return Toast.sad('昵称或者生日或者城市不合法', 2000, 'center');
@@ -82,9 +98,109 @@ class Index extends Component {
 			cropping: true,
 		});
 		console.log(image);
+		// 显示审核中的效果
+
+		let overlayViewRef = null;
+		let overlayView = (
+			<Overlay.View
+				style={{flex: 1, backgroundColor: '#000'}}
+				modal={true}
+				overlayOpacity={0}
+				ref={(v) => (overlayViewRef = v)}>
+				<View
+					style={{
+						marginTop: pxToDp(30),
+						alignSelf: 'center',
+						width: pxToDp(334),
+						height: pxToDp(334),
+						position: 'relative',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+					<Image
+						source={require('../../../res/scan.gif')}
+						style={{
+							width: '100%',
+							height: '100%',
+							position: 'absolute',
+							left: 0,
+							top: 0,
+							zIndex: 100,
+						}}
+					/>
+					<Image
+						source={{uri: image.path}}
+						style={{
+							width: '60%',
+							height: '60%',
+							position: 'relative',
+							top: pxToDp(10),
+						}}
+					/>
+				</View>
+			</Overlay.View>
+		);
+		Overlay.show(overlayView);
+
+		let res0 = await this.uploadHeadImg(image);
+		console.log(res0);
+		// 是否上传头像成功
+		if (res0.code !== '10000') {
+			return;
+		}
+		// 开始构造参数 完善个人信息
+		let params = this.state;
+		params.header = res0.data.headImgPath;
+		const res1 = await request.privatePost(ACCOUNT_REGINFO, params);
+		console.log(res1);
+		if (res1.code !== '10000') {
+			// 完善信息失败
+			return false;
+		}
+		/* 极光初始化 */
+		JMessage.init();
+		// 注册极光
+		const res2 = await this.jgBusiness(
+			this.props.RootStore.userId,
+			this.props.RootStore.mobile,
+		);
+		console.log(res2);
+
+		// 注册完成
+		// 1. 关闭头像审核浮层
+		overlayViewRef.close();
+		// 2. 给用户提示
+		Toast.smile('恭喜 操作成功', 2000, 'center');
+		// 3. 跳转 交友页面
+		setTimeout(() => {
+			this.props.navigation.navigate('Tabbar');
+		}, 2000);
+	};
+	// 执行极光的注册
+	jgBusiness = (username, password) => {
+		return JMessage.register(username, password);
+	};
+	// 上传头像
+	uploadHeadImg = (image) => {
+		//  构造参数发送到后台,完成头像上传
+		let formData = new FormData();
+		formData.append('headPhoto', {
+			// 本地图片的地址
+			uri: image.path,
+			// 图片类型
+			type: image.mime,
+			// 图片的名称
+			name: image.path.split('/').pop(),
+		});
+		// 执行头像上传
+		return request.privatePost(ACCOUNT_CHECKHEADIMAGE, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
 	};
 	render() {
-		const {gender, nickname, birthday, address, city} = this.state;
+		const {gender, nickname, birthday, city} = this.state;
 		const dateNow = new Date();
 		const currentDate =
 			dateNow.getFullYear() +

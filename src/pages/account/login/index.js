@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, Image, StatusBar, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {pxToDp} from '../../../utils/stylesKits';
 import {Input} from 'react-native-elements';
 import validator from '../../../utils/validator';
@@ -8,14 +9,14 @@ import {ACCOUNT_LOGIN, ACCOUNT_VALIDATEVCODE} from '../../../utils/pathMap';
 import THButton from '../../../components/THButton';
 import {CodeField, Cursor} from 'react-native-confirmation-code-field';
 import Toast from '../../../utils/Toast';
+import {inject, observer} from 'mobx-react';
 
+@inject('RootStore')
+@observer
 class Login extends Component {
-	constructor() {
-		super();
-	}
 	state = {
 		// 手机号码
-		phoneNumber: '15980260339',
+		phoneNumber: '18665711978',
 		// 手机号码是否合法
 		phoneValid: true,
 		// 是否显示登陆页面
@@ -80,6 +81,7 @@ class Login extends Component {
 	onVcodeSubmitEditing = async () => {
 		// 1. 对验证码校验
 		// 2. 将手机号码和验证码发送到后台
+		//    将用户数据存放到mobx中
 		// 3. 返回值 isNew (新旧用户)
 		// 4. 新用户 -> 完善个人信息
 		// 5. 老用户 -> 首页
@@ -96,12 +98,27 @@ class Login extends Component {
 		if (res.code !== '10000') {
 			return false;
 		}
+		// 存储用户数据到mobx中
+		this.props.RootStore.setUserInfo(
+			phoneNumber,
+			res.data.token,
+			res.data.id,
+		);
+		// 存储用户数据到本地缓存中 永久存在 AsyncStorage
+		AsyncStorage.setItem(
+			'userinfo',
+			JSON.stringify({
+				mobile: phoneNumber,
+				token: res.data.token,
+				userId: res.data.id,
+			}),
+		);
 		if (res.data.isNew) {
 			// 新用户跳转到userinfo页面
 			this.props.navigation.navigate('UserInfo');
 		} else {
 			// 老用户
-			alert('老用户跳转交友页面');
+			this.props.navigation.navigate('Tabbar');
 		}
 	};
 	// 渲染登陆页面

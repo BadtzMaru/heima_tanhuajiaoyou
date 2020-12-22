@@ -22,6 +22,10 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <!-- 极光的配置 -->
+      <meta-data android:name="JPUSH_CHANNEL" android:value="${APP_CHANNEL}" />
+      <meta-data android:name="JPUSH_APPKEY" android:value="${JPUSH_APPKEY}" />
+      <!-- 极光的配置 -->
     </application>
 
 </manifest>

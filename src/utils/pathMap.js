@@ -29,9 +29,9 @@ export const USER_INFO = '/my/userinfo'; //审核头像
  */
 export const FRIENDS_VISITORS = '/friends/visitors'; // 最近来访
 /**
- * 最近来访
+ * 今日佳人
  */
-export const FRIENDS_TODAYBEST = '/friends/todayBest'; // 最近来访
+export const FRIENDS_TODAYBEST = '/friends/todayBest'; // 今日佳人
 /**
  * 推荐朋友
  */
