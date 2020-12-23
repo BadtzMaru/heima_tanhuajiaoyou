@@ -4,7 +4,10 @@ import IconMap from '../../res/fonts/icon';
 
 const IconFont = (props) => {
 	return (
-		<Text style={{fontFamily: 'iconfont', ...props.style}}>
+		<Text
+			onPress={props.onPress}
+			style={{fontFamily: 'iconfont', ...props.style}}
+		>
 			{IconMap[props.name]}
 		</Text>
 	);

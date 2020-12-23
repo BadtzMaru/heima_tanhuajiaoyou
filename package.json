@@ -25,6 +25,7 @@
 		"react-native-amap-geolocation": "^1.1.2",
 		"react-native-confirmation-code-field": "^6.5.1",
 		"react-native-datepicker": "^1.7.2",
+		"react-native-deck-swiper": "^2.0.5",
 		"react-native-elements": "^3.0.1",
 		"react-native-gesture-handler": "^1.9.0",
 		"react-native-image-crop-picker": "0.31.1",
@@ -36,8 +37,9 @@
 		"react-native-screens": "^2.16.1",
 		"react-native-svg": "^12.1.0",
 		"react-native-svg-uri": "^1.2.3",
-		"react-native-tab-navigator": "^0.3.4",
+		"react-native-tab-navigator": "0.3.4",
 		"react-native-vector-icons": "^7.1.0",
+		"react-native-view-overflow": "^0.0.5",
 		"teaset": "^0.7.5"
 	},
 	"devDependencies": {

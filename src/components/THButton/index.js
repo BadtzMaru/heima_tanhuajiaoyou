@@ -4,7 +4,7 @@ import {pxToDp} from '../../utils/stylesKits';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-class Index extends Component {
+class THButton extends Component {
 	static defaultProps = {
 		style: {},
 		textStyle: {},
@@ -20,14 +20,17 @@ class Index extends Component {
 					height: '100%',
 					overflow: 'hidden',
 					...this.props.style,
-				}}>
+				}}
+			>
 				<LinearGradient
 					start={{x: 0, y: 0}}
 					end={{x: 1, y: 0}}
 					colors={['#9b63cd', '#e0708c']}
-					style={styles.linearGradient}>
+					style={styles.linearGradient}
+				>
 					<Text
-						style={{...styles.buttonText, ...this.props.textStyle}}>
+						style={{...styles.buttonText, ...this.props.textStyle}}
+					>
 						{this.props.children}
 					</Text>
 				</LinearGradient>
@@ -56,4 +59,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Index;
+export default THButton;

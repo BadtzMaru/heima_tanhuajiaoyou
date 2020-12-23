@@ -3,8 +3,16 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import Svg from 'react-native-svg-uri';
 import {tanhua, near, testSoul} from '../../../../res/fonts/iconSvg';
 import {pxToDp} from '../../../../utils/stylesKits';
+import {NavigationContext} from '@react-navigation/native';
 
 class Index extends Component {
+	static contextType = NavigationContext;
+
+	// 跳转页面
+	goPage = (pathName) => {
+		// this.context = this.props.navigation
+		this.context.navigate(pathName);
+	};
 	render() {
 		return (
 			<View
@@ -12,8 +20,12 @@ class Index extends Component {
 					flexDirection: 'row',
 					width: '80%',
 					justifyContent: 'space-around',
-				}}>
-				<TouchableOpacity style={{alignItems: 'center'}}>
+				}}
+			>
+				<TouchableOpacity
+					style={{alignItems: 'center'}}
+					onPress={() => this.goPage('TanHua')}
+				>
 					<View
 						style={{
 							width: pxToDp(70),
@@ -22,7 +34,8 @@ class Index extends Component {
 							backgroundColor: 'red',
 							justifyContent: 'center',
 							alignItems: 'center',
-						}}>
+						}}
+					>
 						<Svg
 							width="40"
 							height="40"
@@ -35,7 +48,8 @@ class Index extends Component {
 							fontSize: pxToDp(18),
 							marginTop: pxToDp(4),
 							color: '#ffffff9a',
-						}}>
+						}}
+					>
 						探花
 					</Text>
 				</TouchableOpacity>
@@ -48,7 +62,8 @@ class Index extends Component {
 							backgroundColor: '#2bd3f8',
 							justifyContent: 'center',
 							alignItems: 'center',
-						}}>
+						}}
+					>
 						<Svg
 							width="40"
 							height="40"
@@ -61,7 +76,8 @@ class Index extends Component {
 							fontSize: pxToDp(18),
 							marginTop: pxToDp(4),
 							color: '#ffffff9a',
-						}}>
+						}}
+					>
 						附近
 					</Text>
 				</TouchableOpacity>
@@ -74,7 +90,8 @@ class Index extends Component {
 							backgroundColor: '#ecc768',
 							justifyContent: 'center',
 							alignItems: 'center',
-						}}>
+						}}
+					>
 						<Svg
 							width="40"
 							height="40"
@@ -87,7 +104,8 @@ class Index extends Component {
 							fontSize: pxToDp(18),
 							marginTop: pxToDp(4),
 							color: '#ffffff9a',
-						}}>
+						}}
+					>
 						测试
 					</Text>
 				</TouchableOpacity>

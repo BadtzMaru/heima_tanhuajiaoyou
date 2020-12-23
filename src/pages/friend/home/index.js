@@ -8,6 +8,8 @@ import PerfectGirl from './components/PerfectGirl';
 import request from '../../../utils/request';
 import {BASE_URI, FRIENDS_RECOMMEND} from '../../../utils/pathMap';
 import IconFont from '../../../components/IconFont';
+import {Overlay} from 'teaset';
+import FilterPanel from './components/FilterPanel';
 
 class Index extends Component {
 	state = {
@@ -28,13 +30,39 @@ class Index extends Component {
 		this.getRecommends();
 	}
 	// 获取推荐朋友
-	getRecommends = async () => {
-		const res = await request.privateGet(
-			FRIENDS_RECOMMEND,
-			this.state.params,
-		);
+	getRecommends = async (filterParams = {}) => {
+		const res = await request.privateGet(FRIENDS_RECOMMEND, {
+			...this.state.params,
+			...filterParams,
+		});
+		console.log('获取推荐朋友: ', res);
 		this.setState({recommends: res.data});
-		console.log(res);
+	};
+	// 点击事件筛选浮层
+	recommendFilterShow = () => {
+		// 获取需要传递的参数
+		const {page, pagesize, ...others} = this.state.params;
+		let overlayRef = null;
+		let overlayView = (
+			<Overlay.View
+				modal={true}
+				overlayOpacity={0.3}
+				ref={(v) => (overlayRef = v)}
+			>
+				{/* 筛选组件 */}
+				<FilterPanel
+					params={others}
+					onClose={() => overlayRef.close()}
+					onSubmitFilter={this.handleSubmitFilter}
+				/>
+			</Overlay.View>
+		);
+		Overlay.show(overlayView);
+	};
+	// 接收到了筛选组件传递过来的数据
+	handleSubmitFilter = (filterParams) => {
+		// 接收到的filterParams 和页面中旧的params做对象合并
+		this.getRecommends(filterParams);
 	};
 	render() {
 		const {recommends} = this.state;
@@ -55,6 +83,7 @@ class Index extends Component {
 							backgroundColor="transparent"
 							translucent={true}
 						/>
+						{/* 交友首页头部 三个按钮 */}
 						<FriendHead />
 					</View>
 				)}
@@ -85,6 +114,7 @@ class Index extends Component {
 						>
 							<Text style={{color: '#666'}}>推荐</Text>
 							<IconFont
+								onPress={this.recommendFilterShow}
 								name="iconshaixuan"
 								style={{color: '#666'}}
 							/>
