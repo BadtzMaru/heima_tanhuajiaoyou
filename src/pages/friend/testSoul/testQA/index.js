@@ -7,7 +7,11 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import request from '../../../../utils/request';
-import {BASE_URI, FRIENDS_QUESTIONSECTION} from '../../../../utils/pathMap';
+import {
+	BASE_URI,
+	FRIENDS_QUESTIONSECTION,
+	FRIENDS_QUESTIONANS,
+} from '../../../../utils/pathMap';
 import THNav from '../../../../components/THNav';
 import {pxToDp} from '../../../../utils/stylesKits';
 import {inject, observer} from 'mobx-react';
@@ -21,6 +25,7 @@ class TestQA extends Component {
 		中级: require('../../../../res/leve2.png'),
 		高级: require('../../../../res/leve3.png'),
 	};
+	ansList = [];
 	state = {
 		// 测试题问卷类表数据
 		questionList: [],
@@ -38,9 +43,63 @@ class TestQA extends Component {
 		const res = await request.privateGet(url);
 		this.setState({questionList: res.data});
 	};
+	getFont = (number) => {
+		let numCn = '';
+		switch (number) {
+			case 1:
+				numCn = '一';
+				break;
+			case 2:
+				numCn = '二';
+				break;
+			case 3:
+				numCn = '三';
+				break;
+			case 4:
+				numCn = '四';
+				break;
+			case 5:
+				numCn = '五';
+				break;
+			case 6:
+				numCn = '六';
+				break;
+			case 7:
+				numCn = '七';
+				break;
+			case 8:
+				numCn = '八';
+				break;
+			case 9:
+				numCn = '九';
+				break;
+			default:
+				numCn = number;
+		}
+		return numCn;
+	};
+	// 选择了答案
+	chooseAns = async (ans) => {
+		const {currentIndex, questionList} = this.state;
+		this.ansList.push(ans);
+		if (currentIndex >= questionList.length - 1) {
+			// 最后一题了
+			const url = FRIENDS_QUESTIONANS.replace(
+				':id',
+				this.props.route.params.qid,
+			);
+			const answers = this.ansList.join(',');
+			const res = await request.privatePost(url, {answers});
+			this.props.navigation.navigate('TestResult', res.data);
+		} else {
+			this.setState({currentIndex: currentIndex + 1});
+		}
+	};
 	render() {
 		const question = this.props.route.params;
 		const user = this.props.UserStore.user;
+		const {currentIndex, questionList} = this.state;
+		if (!questionList[currentIndex]) return <></>;
 		return (
 			<View
 				style={{flex: 1, backgroundColor: '#fff', position: 'relative'}}
@@ -106,7 +165,7 @@ class TestQA extends Component {
 									fontWeight: 'bold',
 								}}
 							>
-								第一题
+								第{this.getFont(currentIndex + 1)}题
 							</Text>
 							<Text
 								style={{
@@ -114,7 +173,7 @@ class TestQA extends Component {
 									textAlign: 'center',
 								}}
 							>
-								(1/3)
+								({currentIndex + 1}/{questionList.length})
 							</Text>
 						</View>
 						<Text
@@ -125,27 +184,36 @@ class TestQA extends Component {
 								color: '#fff',
 							}}
 						>
-							未来生活未来生活未来生活未来生活未来生活未来生活未来生活未来生活未来生活未来生活
+							{questionList[currentIndex].question_title}
 						</Text>
 						{/* 答案 开始 */}
 						<View style={{width: '100%'}}>
-							<TouchableOpacity style={{marginTop: pxToDp(10)}}>
-								<LinearGradient
-									style={{
-										height: pxToDp(40),
-										borderRadius: pxToDp(6),
-										alignItems: 'center',
-										justifyContent: 'center',
-									}}
-									colors={['#6f45f3', '#6f45f31a']}
-									start={{x: 0, y: 0}}
-									end={{x: 1, y: 1}}
+							{questionList[currentIndex].answers.map((v, i) => (
+								<TouchableOpacity
+									style={{marginTop: pxToDp(10)}}
+									key={i}
+									onPress={this.chooseAns.bind(
+										this,
+										v.ans_No,
+									)}
 								>
-									<Text style={{color: '#fff'}}>
-										和物质相关
-									</Text>
-								</LinearGradient>
-							</TouchableOpacity>
+									<LinearGradient
+										style={{
+											height: pxToDp(40),
+											borderRadius: pxToDp(6),
+											alignItems: 'center',
+											justifyContent: 'center',
+										}}
+										colors={['#6f45f3', '#6f45f31a']}
+										start={{x: 0, y: 0}}
+										end={{x: 1, y: 1}}
+									>
+										<Text style={{color: '#fff'}}>
+											{v.ans_title}
+										</Text>
+									</LinearGradient>
+								</TouchableOpacity>
+							))}
 						</View>
 						{/* 答案 结束 */}
 					</View>

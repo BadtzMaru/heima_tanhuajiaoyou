@@ -10,6 +10,7 @@ import TanHua from './pages/friend/tanhua';
 import Search from './pages/friend/search';
 import TextSoul from './pages/friend/testSoul';
 import TestQA from './pages/friend/testSoul/testQA';
+import TestResult from './pages/friend/testSoul/testResult';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,7 @@ class Nav extends Component {
 					<Stack.Screen name="Search" component={Search} />
 					<Stack.Screen name="TextSoul" component={TextSoul} />
 					<Stack.Screen name="TestQA" component={TestQA} />
+					<Stack.Screen name="TestResult" component={TestResult} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		);
