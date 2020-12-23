@@ -19,7 +19,7 @@ class Nav extends Component {
 	constructor(props) {
 		super();
 		this.state = {
-			initialRouteName: props.RootStore.token ? 'TextSoul' : 'Login',
+			initialRouteName: props.RootStore.token ? 'Tabbar' : 'Login',
 		};
 	}
 	state = {};

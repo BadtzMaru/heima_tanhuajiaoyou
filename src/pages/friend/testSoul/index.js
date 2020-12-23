@@ -40,6 +40,7 @@ class TextSoul extends Component {
 				>
 					{questions.length ? (
 						<Swiper
+							key={Date.now()}
 							cards={questions}
 							renderCard={(question) => {
 								return (
@@ -57,13 +58,19 @@ class TextSoul extends Component {
 									</View>
 								);
 							}}
-							onSwiped={(cardIndex) =>
-								this.setState({currentIndex: currentIndex + 1})
-							}
-							onSwipedAll={() => {
-								console.log('onSwipedAll');
+							onSwiped={(cardIndex) => {
+								if (cardIndex === 2) {
+									this.setState({currentIndex: 0});
+								} else {
+									this.setState({
+										currentIndex: currentIndex + 1,
+									});
+								}
 							}}
-							cardIndex={0}
+							onSwipedAll={() => {
+								this.setState({currentIndex: 0});
+							}}
+							cardIndex={currentIndex}
 							backgroundColor={'transparent'}
 							stackSize={1}
 							cardVerticalMargin={0}

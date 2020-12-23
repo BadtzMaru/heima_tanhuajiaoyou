@@ -16,8 +16,20 @@ import Friend from './pages/friend/home';
 import Group from './pages/group/home';
 import Message from './pages/message/home';
 import My from './pages/my/home';
+import request from './utils/request';
+import {MY_INFO} from './utils/pathMap';
+import {inject, observer} from 'mobx-react';
 
+@inject('UserStore')
+@observer
 class Index extends Component {
+	async componentDidMount() {
+		// 1. 发送请求获取用户信息
+		// 2. 用户信息存到 mobx 中
+		const res = await request.privateGet(MY_INFO);
+		console.log('个人信息:', res.data);
+		this.props.UserStore.setUser(res.data);
+	}
 	state = {
 		selectedTab: 'friend',
 		pages: [
@@ -88,7 +100,8 @@ class Index extends Component {
 							tabStyle={{
 								backgroundColor: '#eee',
 								justifyContent: 'center',
-							}}>
+							}}
+						>
 							{v.component}
 						</TabNavigator.Item>
 					))}
