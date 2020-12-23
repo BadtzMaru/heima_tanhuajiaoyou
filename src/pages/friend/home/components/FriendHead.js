@@ -9,9 +9,9 @@ class Index extends Component {
 	static contextType = NavigationContext;
 
 	// 跳转页面
-	goPage = (pathName) => {
+	goPage = (page) => {
 		// this.context = this.props.navigation
-		this.context.navigate(pathName);
+		this.context.navigate(page);
 	};
 	render() {
 		return (
@@ -53,7 +53,10 @@ class Index extends Component {
 						探花
 					</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={{alignItems: 'center'}}>
+				<TouchableOpacity
+					style={{alignItems: 'center'}}
+					onPress={() => this.goPage('Search')}
+				>
 					<View
 						style={{
 							width: pxToDp(70),
@@ -81,7 +84,10 @@ class Index extends Component {
 						附近
 					</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={{alignItems: 'center'}}>
+				<TouchableOpacity
+					style={{alignItems: 'center'}}
+					onPress={() => this.goPage('TextSoul')}
+				>
 					<View
 						style={{
 							width: pxToDp(70),
@@ -106,7 +112,7 @@ class Index extends Component {
 							color: '#ffffff9a',
 						}}
 					>
-						测试
+						测性格
 					</Text>
 				</TouchableOpacity>
 			</View>
