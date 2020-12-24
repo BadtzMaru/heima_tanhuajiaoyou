@@ -7,18 +7,7 @@ import IconFont from '../../../../components/IconFont';
 
 class Index extends Component {
 	state = {
-		perfectGirl: {
-			// age: 20,
-			// agediff: -3,
-			// dist: 962.9,
-			// fateValue: 69,
-			// gender: '女',
-			// header: '/upload/18665333333.jpg',
-			// id: 83,
-			// marry: '单身',
-			// nick_name: '33333',
-			// xueli: '大专',
-		},
+		perfectGirl: {},
 	};
 	async componentDidMount() {
 		const res = await request.privateGet(FRIENDS_TODAYBEST);

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Image} from 'react-native';
+import {View, Text, StatusBar, Image, TouchableOpacity} from 'react-native';
 import HeaderImageScrollView from 'react-native-image-header-scroll-view';
 import {pxToDp} from '../../../utils/stylesKits';
 import FriendHead from './components/FriendHead';
@@ -10,8 +10,10 @@ import {BASE_URI, FRIENDS_RECOMMEND} from '../../../utils/pathMap';
 import IconFont from '../../../components/IconFont';
 import {Overlay} from 'teaset';
 import FilterPanel from './components/FilterPanel';
+import {NavigationContext} from '@react-navigation/native';
 
 class Index extends Component {
+	static contextType = NavigationContext;
 	state = {
 		// 接口要的数据
 		params: {
@@ -47,8 +49,7 @@ class Index extends Component {
 			<Overlay.View
 				modal={true}
 				overlayOpacity={0.3}
-				ref={(v) => (overlayRef = v)}
-			>
+				ref={(v) => (overlayRef = v)}>
 				{/* 筛选组件 */}
 				<FilterPanel
 					params={others}
@@ -77,8 +78,7 @@ class Index extends Component {
 							height: pxToDp(130),
 							justifyContent: 'center',
 							alignItems: 'center',
-						}}
-					>
+						}}>
 						<StatusBar
 							backgroundColor="transparent"
 							translucent={true}
@@ -86,13 +86,11 @@ class Index extends Component {
 						{/* 交友首页头部 三个按钮 */}
 						<FriendHead />
 					</View>
-				)}
-			>
+				)}>
 				<View
 					style={{
 						height: 1000,
-					}}
-				>
+					}}>
 					{/* 1.0 访客 开始 */}
 					<Vistors />
 					{/* 1.0 访客 结束 */}
@@ -110,8 +108,7 @@ class Index extends Component {
 								paddingLeft: pxToDp(10),
 								paddingRight: pxToDp(10),
 								alignItems: 'center',
-							}}
-						>
+							}}>
 							<Text style={{color: '#666'}}>推荐</Text>
 							<IconFont
 								onPress={this.recommendFilterShow}
@@ -122,7 +119,7 @@ class Index extends Component {
 						{/* 列表内容 */}
 						<View>
 							{recommends.map((v, i) => (
-								<View
+								<TouchableOpacity
 									key={i}
 									style={{
 										flexDirection: 'row',
@@ -131,14 +128,17 @@ class Index extends Component {
 										borderBottomWidth: pxToDp(1),
 										borderBottomColor: '#ccc',
 									}}
-								>
+									onPress={() =>
+										this.context.navigate('Detail', {
+											id: v.id,
+										})
+									}>
 									{/* 图片 */}
 									<View
 										style={{
 											paddingLeft: pxToDp(15),
 											paddingRight: pxToDp(15),
-										}}
-									>
+										}}>
 										<Image
 											source={{uri: BASE_URI + v.header}}
 											style={{
@@ -153,14 +153,12 @@ class Index extends Component {
 										style={{
 											flex: 2,
 											justifyContent: 'space-around',
-										}}
-									>
+										}}>
 										<View
 											style={{
 												flexDirection: 'row',
 												alignItems: 'center',
-											}}
-										>
+											}}>
 											<Text style={{color: '#555'}}>
 												{v.nick_name}
 											</Text>
@@ -209,8 +207,7 @@ class Index extends Component {
 											alignItems: 'center',
 											width: pxToDp(80),
 											justifyContent: 'center',
-										}}
-									>
+										}}>
 										<IconFont
 											name="iconxihuan"
 											style={{
@@ -222,7 +219,7 @@ class Index extends Component {
 											{Math.floor(v.fateValue)}
 										</Text>
 									</View>
-								</View>
+								</TouchableOpacity>
 							))}
 						</View>
 					</View>
