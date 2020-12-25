@@ -12,41 +12,40 @@ import TextSoul from './pages/friend/testSoul';
 import TestQA from './pages/friend/testSoul/testQA';
 import TestResult from './pages/friend/testSoul/testResult';
 import Detail from './pages/friend/detail';
+import Chat from './pages/message/chat';
 
 const Stack = createStackNavigator();
 
 @inject('RootStore')
 @observer
 class Nav extends Component {
-	constructor(props) {
-		super();
-		this.state = {
-			initialRouteName: props.RootStore.token ? 'Tabbar' : 'Login',
-		};
-	}
-	state = {};
-	render() {
-		const {initialRouteName} = this.state;
-		return (
-			<NavigationContainer>
-				<Stack.Navigator
-					initialRouteName={initialRouteName}
-					headerMode="none "
-				>
-					<Stack.Screen name="Demo" component={Demo} />
-					<Stack.Screen name="Login" component={Login} />
-					<Stack.Screen name="UserInfo" component={UserInfo} />
-					<Stack.Screen name="Tabbar" component={Tabbar} />
-					<Stack.Screen name="TanHua" component={TanHua} />
-					<Stack.Screen name="Search" component={Search} />
-					<Stack.Screen name="TextSoul" component={TextSoul} />
-					<Stack.Screen name="TestQA" component={TestQA} />
-					<Stack.Screen name="TestResult" component={TestResult} />
-					<Stack.Screen name="Detail" component={Detail} />
-				</Stack.Navigator>
-			</NavigationContainer>
-		);
-	}
+  constructor(props) {
+    super();
+    this.state = {
+      initialRouteName: props.RootStore.token ? 'Tabbar' : 'Login',
+    };
+  }
+  state = {};
+  render() {
+    const {initialRouteName} = this.state;
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={initialRouteName} headerMode="none ">
+          <Stack.Screen name="Demo" component={Demo} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="UserInfo" component={UserInfo} />
+          <Stack.Screen name="Tabbar" component={Tabbar} />
+          <Stack.Screen name="TanHua" component={TanHua} />
+          <Stack.Screen name="Search" component={Search} />
+          <Stack.Screen name="TextSoul" component={TextSoul} />
+          <Stack.Screen name="TestQA" component={TestQA} />
+          <Stack.Screen name="TestResult" component={TestResult} />
+          <Stack.Screen name="Detail" component={Detail} />
+          <Stack.Screen name="Chat" component={Chat} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
 
 export default Nav;

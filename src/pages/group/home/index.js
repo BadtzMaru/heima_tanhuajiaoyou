@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import React from 'react';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
+import CustomerBar from './components/CustomerBar';
+import Latest from './latest';
+import Recommend from './recommend';
 
-class Index extends Component {
-	render() {
-		return (
-			<View>
-				<Text>圈子-首页</Text>
-			</View>
-		);
-	}
-}
-
-export default Index;
+export default () => {
+  return (
+    <ScrollableTabView initialPage={0} renderTabBar={() => <CustomerBar />}>
+      <Recommend tabLabel="推荐" />
+      <Latest tabLabel="最新" />
+    </ScrollableTabView>
+  );
+};
