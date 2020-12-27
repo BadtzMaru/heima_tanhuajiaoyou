@@ -26,7 +26,6 @@ class Index extends Component {
   }
 
   state = {
-    selectedTab: 'group',
     pages: [
       {
         selected: 'friend',
@@ -62,6 +61,14 @@ class Index extends Component {
       },
     ],
   };
+  constructor(props) {
+    super(props);
+    let selectedTab = 'friend';
+    if (this.props.route.params && this.props.route.params.pagename) {
+      selectedTab = this.props.route.params.pagename;
+    }
+    this.state.selectedTab = selectedTab;
+  }
   render() {
     const {selectedTab, pages} = this.state;
     return (

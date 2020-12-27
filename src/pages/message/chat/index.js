@@ -114,7 +114,6 @@ class TestRNIMUI extends Component {
         message.msgType = 'image';
         message.mediaPath = v.thumbPath;
       }
-
       // 带上发送时间
       message.timeString = new Date(v.createTime).toLocaleTimeString();
       // 图片路径
@@ -239,8 +238,8 @@ class TestRNIMUI extends Component {
     const message = constructNormalMessage();
     message.msgType = 'text';
     message.text = text;
+    message.fromUser.avatarPath = BASE_URI + this.props.UserStore.user.header;
     AuroraIController.appendMessages([message]);
-
     // 极光来实现发送文本
     const username = this.props.route.params.guid;
     // 额外的数据

@@ -10,10 +10,15 @@ import JMessage from '../../../../utils/JMessage';
 import {inject, observer} from 'mobx-react';
 import {ActionSheet} from 'teaset';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import {NavigationContext} from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+import Validator from '../../../../utils/validator';
+import {EMOTIONS_DATA} from '../../../../components/Emotion/datasource';
 
 @inject('UserStore')
 @observer
 class Recommend extends Component {
+  static contextType = NavigationContext;
   params = {
     page: 1,
     pagesize: 5,
@@ -115,6 +120,27 @@ class Recommend extends Component {
     const imgUrls = this.state.list[index].images.map((v) => ({url: BASE_URI + v.thum_img_path}));
     this.setState({imgUrls, currentIndex: ii, showAlbum: true});
   };
+  // 跳转到评论页面
+  goComment = (item) => {
+    this.context.navigate('Comment', item);
+  };
+  // 渲染富文本内容
+  renderRichText = (text) => {
+    const list = Validator.renderRichText(text);
+    return list.map((v, i) => {
+      if (v.text) {
+        return (
+          <Text key={i} style={{color: '#666'}}>
+            {v.text}
+          </Text>
+        );
+      } else if (v.image) {
+        return <Image key={i} style={{width: pxToDp(25), height: pxToDp(25)}} source={EMOTIONS_DATA[v.image]} />;
+      } else {
+        return <></>;
+      }
+    });
+  };
   render() {
     const {list, imgUrls, currentIndex, showAlbum} = this.state;
     return (
@@ -211,9 +237,7 @@ class Recommend extends Component {
                 {/* 2.2.1 用户信息模块 结束 */}
 
                 {/* 2.3 动态内容 开始 */}
-                <View style={{marginTop: pxToDp(8)}}>
-                  <Text style={{color: '#666'}}>{item.content}</Text>
-                </View>
+                <View style={{marginTop: pxToDp(8), flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center'}}>{this.renderRichText(item.content)}</View>
                 {/* 2.3 动态内容 结束 */}
 
                 {/* 2.4 相册开始 开始 */}
@@ -243,7 +267,7 @@ class Recommend extends Component {
                     <IconFont name="icondianzan-o" style={{color: '#666'}} />
                     <Text style={{color: '#666', marginLeft: pxToDp(5)}}>{item.star_count}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <TouchableOpacity onPress={this.goComment.bind(this, item)} style={{flexDirection: 'row', alignItems: 'center'}}>
                     <IconFont name="iconpinglun" style={{color: '#666'}} />
                     <Text style={{color: '#666', marginLeft: pxToDp(5)}}>{item.comment_count}</Text>
                   </TouchableOpacity>
@@ -270,6 +294,17 @@ class Recommend extends Component {
         <Modal visible={showAlbum} transparent={true}>
           <ImageViewer imageUrls={imgUrls} index={currentIndex} onClick={() => this.setState({showAlbum: false})} />
         </Modal>
+        {/* 发布动态 开始 */}
+        <TouchableOpacity style={{position: 'absolute', right: '10%', bottom: '10%'}} onPress={() => this.context.navigate('Publish')}>
+          <LinearGradient
+            colors={['#da6c8b', '#9b65cc']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={{width: pxToDp(80), height: pxToDp(80), borderRadius: pxToDp(40), alignItems: 'center', justifyContent: 'center'}}>
+            <Text style={{color: '#fff', fontSize: pxToDp(22)}}>发布</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        {/* 发布动态 结束 */}
       </>
     );
   }

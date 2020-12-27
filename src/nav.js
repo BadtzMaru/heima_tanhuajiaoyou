@@ -13,6 +13,8 @@ import TestQA from './pages/friend/testSoul/testQA';
 import TestResult from './pages/friend/testSoul/testResult';
 import Detail from './pages/friend/detail';
 import Chat from './pages/message/chat';
+import Comment from './pages/group/home/recommend/comment';
+import Publish from './pages/group/home/recommend/publish';
 
 const Stack = createStackNavigator();
 
@@ -30,7 +32,7 @@ class Nav extends Component {
     const {initialRouteName} = this.state;
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={initialRouteName} headerMode="none ">
+        <Stack.Navigator initialRouteName={initialRouteName} headerMode="none">
           <Stack.Screen name="Demo" component={Demo} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UserInfo" component={UserInfo} />
@@ -42,6 +44,8 @@ class Nav extends Component {
           <Stack.Screen name="TestResult" component={TestResult} />
           <Stack.Screen name="Detail" component={Detail} />
           <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen name="Comment" component={Comment} />
+          <Stack.Screen name="Publish" component={Publish} />
         </Stack.Navigator>
       </NavigationContainer>
     );
