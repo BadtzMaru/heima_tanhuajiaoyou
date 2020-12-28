@@ -94,7 +94,6 @@ class Index extends Component {
     });
     console.log(image);
     // 显示审核中的效果
-
     let overlayViewRef = null;
     let overlayView = (
       <Overlay.View style={{flex: 1, backgroundColor: '#000'}} modal={true} overlayOpacity={0} ref={(v) => (overlayViewRef = v)}>

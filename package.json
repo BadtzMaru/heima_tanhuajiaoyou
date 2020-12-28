@@ -29,7 +29,7 @@
 		"react-native-confirmation-code-field": "^6.5.1",
 		"react-native-datepicker": "^1.7.2",
 		"react-native-deck-swiper": "^2.0.5",
-		"react-native-elements": "^3.0.1",
+		"react-native-elements": "2.0.2",
 		"react-native-fs": "^2.16.6",
 		"react-native-gesture-handler": "^1.9.0",
 		"react-native-image-crop-picker": "0.31.1",

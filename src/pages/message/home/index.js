@@ -29,7 +29,8 @@ class Index extends Component {
     }
   };
   render() {
-    const {list} = this.state;
+    let {list} = this.state;
+    list = list.filter((v) => v.latestMessage);
     return (
       <View>
         {/* 顶部导航 开始 */}
