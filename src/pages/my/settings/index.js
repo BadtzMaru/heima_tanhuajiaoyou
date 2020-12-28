@@ -6,6 +6,8 @@ import {inject, observer} from 'mobx-react';
 import {pxToDp} from '../../../utils/stylesKits';
 import {ActionSheet} from 'teaset';
 import AsyncStorage from '@react-native-community/async-storage';
+import JMessage from '../../../utils/JMessage';
+import Toast from '../../../utils/Toast';
 
 @inject('UserStore')
 @inject('RootStore')
@@ -21,6 +23,12 @@ class Settings extends Component {
       this.props.UserStore.clearUser();
       // 清除token数据
       this.props.RootStore.clearUserInfo();
+      // 极光退出
+      JMessage.logout();
+      Toast.smile('退出成功', 2000);
+      setTimeout(() => {
+        this.props.navigation.navigate('Login');
+      }, 2000);
     };
     const opts = [{title: '退出', onPress: tmplogout}];
     ActionSheet.show(opts, {title: '取消'});

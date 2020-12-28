@@ -128,8 +128,8 @@ class Index extends Component {
             leftIcon={<IconFont style={{color: 'green', fontSize: pxToDp(20)}} name="icondongtai" />}
             title="我的动态"
             titleStyle={{color: '#666'}}
-            bottomDivider
             chevron
+            bottomDivider
             onPress={() => this.context.navigate('Trends')}
           />
           <ListItem

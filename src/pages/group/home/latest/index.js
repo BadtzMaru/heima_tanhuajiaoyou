@@ -101,7 +101,7 @@ class Recommend extends Component {
       } else if (v.image) {
         return <Image key={i} style={{width: pxToDp(25), height: pxToDp(25)}} source={EMOTIONS_DATA[v.image]} />;
       } else {
-        return <></>;
+        return <View key={i}></View>;
       }
     });
   };

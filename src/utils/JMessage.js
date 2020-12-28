@@ -82,4 +82,6 @@ export default {
       }, reject);
     });
   },
+  // 退出
+  logout: JMessage.logout,
 };

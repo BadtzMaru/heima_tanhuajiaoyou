@@ -24,7 +24,6 @@ class Index extends Component {
     this.props.UserStore.setUser(res.data);
     await JMessage.login(res.data.guid, res.data.mobile);
   }
-
   state = {
     pages: [
       {

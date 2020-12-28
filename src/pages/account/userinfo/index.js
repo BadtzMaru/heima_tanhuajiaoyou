@@ -152,7 +152,6 @@ class Index extends Component {
     // 注册极光
     const res2 = await this.jgBusiness(this.props.RootStore.userId, this.props.RootStore.mobile);
     console.log(res2);
-
     // 注册完成
     // 1. 关闭头像审核浮层
     overlayViewRef.close();
@@ -160,7 +159,9 @@ class Index extends Component {
     Toast.smile('恭喜 操作成功', 2000, 'center');
     // 3. 跳转 交友页面
     setTimeout(() => {
-      this.props.navigation.navigate('Tabbar');
+      this.props.navigation.reset({
+        routes: [{name: 'Tabbar'}],
+      });
     }, 2000);
   };
   // 执行极光的注册

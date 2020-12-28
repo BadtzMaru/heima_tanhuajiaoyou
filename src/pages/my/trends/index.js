@@ -80,7 +80,7 @@ class Recommend extends Component {
       } else if (v.image) {
         return <Image key={i} style={{width: pxToDp(25), height: pxToDp(25)}} source={EMOTIONS_DATA[v.image]} />;
       } else {
-        return <></>;
+        return <View key={i}></View>;
       }
     });
   };
@@ -198,8 +198,7 @@ class Recommend extends Component {
 
                 {/* 2.5 距离时间 开始 */}
                 <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: pxToDp(5), paddingBottom: pxToDp(5)}}>
-                  <Text style={{color: '#666'}}>距离 {Math.floor(item.dist / 1000)} km</Text>
-                  <Text style={{marginLeft: pxToDp(8), color: '#666'}}>{date(item.create_time).fromNow()}</Text>
+                  <Text style={{color: '#666'}}>{date(item.create_time).fromNow()}</Text>
                 </View>
                 {/* 2.5 距离时间 结束 */}
 
